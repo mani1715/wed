@@ -333,10 +333,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Admin Login Page"
-    - "Admin Dashboard"
-    - "Profile Create/Edit Form"
-    - "Public Invitation Viewer"
+    - "Database Models - Design System"
+    - "Profile Create/Edit Form - Design Selection"
+    - "Public Invitation Viewer - Theme Application"
+    - "Theme Configuration System"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -354,3 +354,5 @@ agent_communication:
     - message: "ADDITIONAL TIMEZONE FIX - Fixed check_profile_active function to properly handle timezone-aware datetime comparisons. Changed default is_active check from False to True to ensure newly created profiles are active by default. This fixes the 'Link Expired' issue for newly created profiles. Ready for backend testing to verify fix."
     - agent: "testing"
     - message: "🎉 TIMEZONE FIX TESTING COMPLETE - ALL TESTS PASSED! Comprehensive testing of timezone fix completed successfully (6/6 tests passed). ✅ Profile Creation Default Expiry: Profiles correctly default to 30 days with is_active=True. ✅ Immediate Public Access: Newly created profiles accessible immediately without 'Link Expired' errors. ✅ Multiple Expiry Options: All expiry presets (1 day, 7 days, 30 days) work immediately after creation. ✅ Timezone-Aware Comparisons: DateTime comparisons working correctly with timezone awareness. ✅ Profile CRUD Operations: All CRUD operations working with timezone fix. ✅ Guest Greeting Submission: Public greeting submission working without expiry issues. CRITICAL TIMEZONE FIX VERIFIED - No more 'Link Expired' errors for fresh profiles!"
+    - agent: "main"
+    - message: "🎨 DESIGN SYSTEM IMPLEMENTED - Added comprehensive theme system with 8 selectable designs. Backend Changes: Added design_id field to Profile models (default: temple_divine). Frontend Changes: 1) ProfileForm now has design selection UI with 8 clickable cards showing design names and descriptions, 2) Created themes.js configuration with all 8 themes defining colors, fonts, spacing, card styles, and image borders, 3) PublicInvitation page now applies selected theme dynamically using CSS variables, 4) All sections (opening, welcome, couple, events, photos, video, greetings, footer) styled with theme variables. Themes: temple_divine, royal_classic, floral_soft, cinematic_luxury, heritage_scroll, minimal_elegant, modern_premium, artistic_handcrafted. Each theme has unique visual identity with no animations/particles. Mobile-first responsive design maintained. Ready for backend and frontend testing."
