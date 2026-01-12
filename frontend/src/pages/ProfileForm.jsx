@@ -62,10 +62,11 @@ const ProfileForm = () => {
         event_type: profile.event_type,
         event_date: new Date(profile.event_date).toISOString().split('T')[0],
         venue: profile.venue,
-        language: profile.language,
+        language: Array.isArray(profile.language) ? profile.language : [profile.language],
         link_expiry_type: profile.link_expiry_type,
-        link_expiry_value: profile.link_expiry_value || '',
-        sections_enabled: profile.sections_enabled
+        link_expiry_value: profile.link_expiry_value || '30',
+        sections_enabled: profile.sections_enabled,
+        slug: profile.slug
       });
     } catch (error) {
       console.error('Failed to fetch profile:', error);
