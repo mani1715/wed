@@ -402,6 +402,30 @@ const ProfileForm = () => {
             </div>
           )}
 
+          {/* Generated Link Display */}
+          {savedProfile && (
+            <Card className="p-6 bg-green-50 border-green-200">
+              <h3 className="text-lg font-semibold text-green-800 mb-2">✓ Profile Saved Successfully!</h3>
+              <p className="text-sm text-gray-700 mb-3">Your invitation link:</p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={window.location.origin + savedProfile.invitation_link}
+                  className="flex-1 px-4 py-2 bg-white border border-gray-300 rounded-md text-sm"
+                />
+                <Button
+                  type="button"
+                  onClick={handleCopyLink}
+                  variant="outline"
+                  className="whitespace-nowrap"
+                >
+                  Copy Link
+                </Button>
+              </div>
+            </Card>
+          )}
+
           {/* Submit */}
           <div className="flex gap-4">
             <Button
@@ -410,15 +434,24 @@ const ProfileForm = () => {
               className="flex-1 bg-rose-500 hover:bg-rose-600 text-white py-3"
             >
               <Save className="w-4 h-4 mr-2" />
-              {loading ? 'Saving...' : (isEdit ? 'Update Profile' : 'Create Profile')}
+              {loading ? 'Saving...' : (isEdit ? 'Update Profile' : 'Save Profile')}
             </Button>
+            {(savedProfile || isEdit) && (
+              <Button
+                type="button"
+                onClick={handlePreview}
+                className="flex-1 bg-purple-500 hover:bg-purple-600 text-white py-3"
+              >
+                Preview Invitation
+              </Button>
+            )}
             <Button
               type="button"
               variant="outline"
               onClick={() => navigate('/admin/dashboard')}
               className="flex-1"
             >
-              Cancel
+              {savedProfile ? 'Back to Dashboard' : 'Cancel'}
             </Button>
           </div>
         </form>
