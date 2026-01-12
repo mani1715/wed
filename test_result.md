@@ -282,6 +282,9 @@ frontend:
         - working: true
         - agent: "main"
         - comment: "✅ UPDATED: Changed language to multi-select checkboxes (Telugu, Hindi, Tamil, English). Updated expiry dropdown to: 1 Day / 7 Days / 30 Days (Default) / Custom. Added Preview Invitation button and Copy Link functionality. Shows generated link immediately after saving. Default expiry set to 30 days."
+        - working: "NA"
+        - agent: "main"
+        - comment: "✅ DESIGN SELECTION ADDED: Added design theme selection with 8 design cards (temple_divine, royal_classic, floral_soft, cinematic_luxury, heritage_scroll, minimal_elegant, modern_premium, artistic_handcrafted). Each card shows design name and description. Single selection mode. Default design: temple_divine. Design stored in profile data and sent to backend."
 
   - task: "Public Invitation Viewer"
     implemented: true
@@ -294,6 +297,21 @@ frontend:
         - working: "NA"
         - agent: "main"
         - comment: "Dynamic invitation display based on slug. Shows all enabled sections: opening, welcome, couple names, event details, photos, video, greetings. Guest greeting submission form. Route: /invite/:slug"
+        - working: "NA"
+        - agent: "main"
+        - comment: "✅ DESIGN SYSTEM APPLIED: Theme configuration system implemented using CSS variables. Dynamically applies selected design theme from profile. All 8 themes defined with unique colors, fonts, spacing, card styles, and image borders. Google Fonts loaded dynamically. All sections (opening, welcome, couple, events, photos, video, greetings, footer) now use theme variables for consistent styling. Mobile-first responsive design maintained."
+
+  - task: "Theme Configuration System"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/config/themes.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "main"
+        - comment: "Created comprehensive theme system with 8 designs. Each theme defines: primary/secondary/background/card/text/accent colors, heading/body fonts, section/card spacing, card shadow/border/radius, image border/radius. Themes: temple_divine (warm ivory, gold, serif), royal_classic (maroon, gold, elegant serif), floral_soft (pastel pink, rounded serif), cinematic_luxury (dark gradient, gold, modern serif), heritage_scroll (parchment, brown, script), minimal_elegant (white, gray, sans-serif), modern_premium (charcoal, teal, geometric), artistic_handcrafted (watercolor, cursive). Helper functions: getTheme(), applyThemeVariables()."
 
   - task: "Routing Configuration"
     implemented: true
