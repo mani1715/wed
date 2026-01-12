@@ -171,6 +171,7 @@ async def create_profile(profile_data: ProfileCreate, admin_id: str = Depends(ge
         event_date=profile_data.event_date,
         venue=profile_data.venue,
         language=profile_data.language,
+        design_id=profile_data.design_id,
         sections_enabled=profile_data.sections_enabled,
         link_expiry_type=profile_data.link_expiry_type,
         link_expiry_value=profile_data.link_expiry_value,
