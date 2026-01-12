@@ -93,6 +93,8 @@ export const InvitationContent = ({ design, deity }) => {
   };
 
   const config = designConfig[design] || designConfig.divine;
+  const cardTextColor = config.cardText || config.text;
+  const cardAccentColor = config.cardAccent || config.accent;
 
   return (
     <div className={`min-h-screen ${config.bg} py-12 px-4`}>
