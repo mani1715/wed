@@ -45,7 +45,7 @@ class Profile(BaseModel):
     event_type: str  # marriage, engagement, birthday
     event_date: datetime
     venue: str
-    language: str  # telugu, hindi, tamil, english
+    language: List[str]  # telugu, hindi, tamil, english - multiple languages supported
     sections_enabled: SectionsEnabled = Field(default_factory=SectionsEnabled)
     link_expiry_type: str  # hours, days, permanent
     link_expiry_value: Optional[int] = None  # number of hours/days
@@ -61,10 +61,10 @@ class ProfileCreate(BaseModel):
     event_type: str
     event_date: datetime
     venue: str
-    language: str = "english"
+    language: List[str] = ["english"]
     sections_enabled: SectionsEnabled = Field(default_factory=SectionsEnabled)
-    link_expiry_type: str = "permanent"
-    link_expiry_value: Optional[int] = None
+    link_expiry_type: str = "days"
+    link_expiry_value: Optional[int] = 30
 
 
 class ProfileUpdate(BaseModel):
@@ -73,7 +73,7 @@ class ProfileUpdate(BaseModel):
     event_type: Optional[str] = None
     event_date: Optional[datetime] = None
     venue: Optional[str] = None
-    language: Optional[str] = None
+    language: Optional[List[str]] = None
     sections_enabled: Optional[SectionsEnabled] = None
     link_expiry_type: Optional[str] = None
     link_expiry_value: Optional[int] = None
@@ -88,7 +88,7 @@ class ProfileResponse(BaseModel):
     event_type: str
     event_date: datetime
     venue: str
-    language: str
+    language: List[str]
     sections_enabled: SectionsEnabled
     link_expiry_type: str
     link_expiry_value: Optional[int]
@@ -147,7 +147,7 @@ class InvitationPublicView(BaseModel):
     event_type: str
     event_date: datetime
     venue: str
-    language: str
+    language: List[str]
     sections_enabled: SectionsEnabled
     media: List[ProfileMedia]
     greetings: List[GreetingResponse]
