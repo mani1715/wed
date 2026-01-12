@@ -24,6 +24,7 @@ const ProfileForm = () => {
     event_date: '',
     venue: '',
     language: ['english'],
+    design_id: 'temple_divine',
     link_expiry_type: 'days',
     link_expiry_value: '30',
     sections_enabled: {
@@ -63,6 +64,7 @@ const ProfileForm = () => {
         event_date: new Date(profile.event_date).toISOString().split('T')[0],
         venue: profile.venue,
         language: Array.isArray(profile.language) ? profile.language : [profile.language],
+        design_id: profile.design_id || 'temple_divine',
         link_expiry_type: profile.link_expiry_type,
         link_expiry_value: profile.link_expiry_value || '30',
         sections_enabled: profile.sections_enabled,
@@ -318,6 +320,39 @@ const ProfileForm = () => {
                   ))}
                 </div>
               </div>
+            </div>
+          </Card>
+
+          {/* Design Selection */}
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">Select Design Theme *</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { id: 'temple_divine', name: 'Temple Divine', desc: 'Warm ivory, gold accents' },
+                { id: 'royal_classic', name: 'Royal Classic', desc: 'Maroon, gold, cream' },
+                { id: 'floral_soft', name: 'Floral Soft', desc: 'Pastel pink, peach' },
+                { id: 'cinematic_luxury', name: 'Cinematic Luxury', desc: 'Dark gradient, gold' },
+                { id: 'heritage_scroll', name: 'Heritage Scroll', desc: 'Parchment, brown' },
+                { id: 'minimal_elegant', name: 'Minimal Elegant', desc: 'White, gray, black' },
+                { id: 'modern_premium', name: 'Modern Premium', desc: 'Charcoal, teal, gold' },
+                { id: 'artistic_handcrafted', name: 'Artistic Handcrafted', desc: 'Watercolor tones' }
+              ].map((design) => (
+                <div
+                  key={design.id}
+                  onClick={() => setFormData(prev => ({ ...prev, design_id: design.id }))}
+                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${
+                    formData.design_id === design.id
+                      ? 'border-rose-500 bg-rose-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="text-sm font-semibold text-gray-800 mb-1">{design.name}</div>
+                  <div className="text-xs text-gray-600">{design.desc}</div>
+                  {formData.design_id === design.id && (
+                    <div className="mt-2 text-rose-600 text-xs font-semibold">✓ Selected</div>
+                  )}
+                </div>
+              ))}
             </div>
           </Card>
 
