@@ -46,6 +46,7 @@ class Profile(BaseModel):
     event_date: datetime
     venue: str
     language: List[str]  # telugu, hindi, tamil, english - multiple languages supported
+    design_id: str = "temple_divine"  # Selected design theme
     sections_enabled: SectionsEnabled = Field(default_factory=SectionsEnabled)
     link_expiry_type: str  # hours, days, permanent
     link_expiry_value: Optional[int] = None  # number of hours/days
@@ -62,6 +63,7 @@ class ProfileCreate(BaseModel):
     event_date: datetime
     venue: str
     language: List[str] = ["english"]
+    design_id: str = "temple_divine"
     sections_enabled: SectionsEnabled = Field(default_factory=SectionsEnabled)
     link_expiry_type: str = "days"
     link_expiry_value: Optional[int] = 30
@@ -74,6 +76,7 @@ class ProfileUpdate(BaseModel):
     event_date: Optional[datetime] = None
     venue: Optional[str] = None
     language: Optional[List[str]] = None
+    design_id: Optional[str] = None
     sections_enabled: Optional[SectionsEnabled] = None
     link_expiry_type: Optional[str] = None
     link_expiry_value: Optional[int] = None
@@ -89,6 +92,7 @@ class ProfileResponse(BaseModel):
     event_date: datetime
     venue: str
     language: List[str]
+    design_id: str
     sections_enabled: SectionsEnabled
     link_expiry_type: str
     link_expiry_value: Optional[int]
@@ -148,6 +152,7 @@ class InvitationPublicView(BaseModel):
     event_date: datetime
     venue: str
     language: List[str]
+    design_id: str
     sections_enabled: SectionsEnabled
     media: List[ProfileMedia]
     greetings: List[GreetingResponse]
