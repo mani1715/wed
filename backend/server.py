@@ -388,6 +388,7 @@ async def get_invitation(slug: str):
         event_date=profile['event_date'],
         venue=profile['venue'],
         language=profile['language'],
+        design_id=profile['design_id'],
         sections_enabled=SectionsEnabled(**profile['sections_enabled']),
         media=[ProfileMedia(**m) for m in media_list],
         greetings=[GreetingResponse(**g) for g in greetings_list]
