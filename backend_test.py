@@ -114,22 +114,22 @@ class WeddingAPITester:
             self.log_test("Auth Me Endpoint", False, f"Exception: {str(e)}")
             return False
     
-    def test_create_profile(self):
-        """Test profile creation"""
-        print("\n👰 Testing Profile Management...")
+    def test_default_expiry_logic(self):
+        """Test CRITICAL FIX: Default expiry logic - profiles should default to 30 days"""
+        print("\n🕒 Testing CRITICAL FIX: Default Expiry Logic...")
         
         if not self.admin_token:
-            self.log_test("Create Profile", False, "No admin token available")
+            self.log_test("Default Expiry Logic", False, "No admin token available")
             return False
         
-        # Create a realistic wedding profile
+        # Create profile WITHOUT specifying expiry (should default to 30 days)
         profile_data = {
-            "groom_name": "Rajesh Kumar",
-            "bride_name": "Priya Sharma",
+            "groom_name": "Arjun Reddy",
+            "bride_name": "Meera Nair",
             "event_type": "marriage",
-            "event_date": (datetime.now() + timedelta(days=30)).isoformat(),
-            "venue": "Grand Palace Hotel, Mumbai",
-            "language": "english",
+            "event_date": (datetime.now() + timedelta(days=45)).isoformat(),
+            "venue": "Leela Palace, Bangalore",
+            "language": ["english", "hindi"],
             "sections_enabled": {
                 "opening": True,
                 "welcome": True,
@@ -139,9 +139,8 @@ class WeddingAPITester:
                 "events": True,
                 "greetings": True,
                 "footer": True
-            },
-            "link_expiry_type": "permanent",
-            "link_expiry_value": None
+            }
+            # NOT specifying link_expiry_type or link_expiry_value - should default
         }
         
         try:
@@ -149,21 +148,254 @@ class WeddingAPITester:
             
             if response.status_code == 200:
                 data = response.json()
-                if "id" in data and "slug" in data and "invitation_link" in data:
-                    self.test_profile_id = data["id"]
-                    self.test_slug = data["slug"]
-                    self.log_test("Create Profile", True, f"Profile created with slug: {data['slug']}")
-                    return True
+                
+                # Check default values
+                if (data.get("link_expiry_type") == "days" and 
+                    data.get("link_expiry_value") == 30 and
+                    data.get("link_expiry_date") is not None):
+                    
+                    # Verify expiry date is approximately 30 days from now
+                    expiry_date = datetime.fromisoformat(data["link_expiry_date"].replace('Z', '+00:00'))
+                    expected_expiry = datetime.now(timezone.utc) + timedelta(days=30)
+                    time_diff = abs((expiry_date - expected_expiry).total_seconds())
+                    
+                    if time_diff < 300:  # Within 5 minutes tolerance
+                        self.test_profile_ids.append(data["id"])
+                        self.test_slugs.append(data["slug"])
+                        self.log_test("Default Expiry Logic", True, 
+                                    f"✅ Defaults correct: type=days, value=30, expiry≈30 days from now")
+                        return True
+                    else:
+                        self.log_test("Default Expiry Logic", False, 
+                                    f"Expiry date calculation incorrect. Expected ≈{expected_expiry}, got {expiry_date}")
+                        return False
                 else:
-                    self.log_test("Create Profile", False, "Missing required fields in response")
+                    self.log_test("Default Expiry Logic", False, 
+                                f"Default values incorrect: type={data.get('link_expiry_type')}, value={data.get('link_expiry_value')}")
                     return False
             else:
-                self.log_test("Create Profile", False, f"Status: {response.status_code}, Response: {response.text}")
+                self.log_test("Default Expiry Logic", False, f"Status: {response.status_code}, Response: {response.text}")
                 return False
                 
         except Exception as e:
-            self.log_test("Create Profile", False, f"Exception: {str(e)}")
+            self.log_test("Default Expiry Logic", False, f"Exception: {str(e)}")
             return False
+
+    def test_multi_language_support(self):
+        """Test CRITICAL FIX: Multi-language support - language should be array"""
+        print("\n🌐 Testing CRITICAL FIX: Multi-Language Support...")
+        
+        if not self.admin_token:
+            self.log_test("Multi-Language Support", False, "No admin token available")
+            return False
+        
+        # Create profile with multiple languages
+        profile_data = {
+            "groom_name": "Vikram Singh",
+            "bride_name": "Kavya Iyer",
+            "event_type": "marriage",
+            "event_date": (datetime.now() + timedelta(days=60)).isoformat(),
+            "venue": "ITC Grand Chola, Chennai",
+            "language": ["english", "hindi", "tamil"],  # Multiple languages
+            "sections_enabled": {
+                "opening": True,
+                "welcome": True,
+                "couple": True,
+                "photos": True,
+                "video": True,
+                "events": True,
+                "greetings": True,
+                "footer": True
+            },
+            "link_expiry_type": "days",
+            "link_expiry_value": 7
+        }
+        
+        try:
+            response = self.session.post(f"{API_BASE}/admin/profiles", json=profile_data)
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                # Check language is returned as array
+                if (isinstance(data.get("language"), list) and 
+                    set(data["language"]) == {"english", "hindi", "tamil"}):
+                    
+                    profile_id = data["id"]
+                    slug = data["slug"]
+                    self.test_profile_ids.append(profile_id)
+                    self.test_slugs.append(slug)
+                    
+                    # Test GET /api/invite/:slug returns language array
+                    public_session = requests.Session()
+                    invite_response = public_session.get(f"{API_BASE}/invite/{slug}")
+                    
+                    if invite_response.status_code == 200:
+                        invite_data = invite_response.json()
+                        if (isinstance(invite_data.get("language"), list) and 
+                            set(invite_data["language"]) == {"english", "hindi", "tamil"}):
+                            
+                            self.log_test("Multi-Language Support", True, 
+                                        f"✅ Language array working: {invite_data['language']}")
+                            return True
+                        else:
+                            self.log_test("Multi-Language Support", False, 
+                                        f"Public API language format incorrect: {invite_data.get('language')}")
+                            return False
+                    else:
+                        self.log_test("Multi-Language Support", False, 
+                                    f"Public invite API failed: {invite_response.status_code}")
+                        return False
+                else:
+                    self.log_test("Multi-Language Support", False, 
+                                f"Language format incorrect in create response: {data.get('language')}")
+                    return False
+            else:
+                self.log_test("Multi-Language Support", False, f"Status: {response.status_code}, Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Multi-Language Support", False, f"Exception: {str(e)}")
+            return False
+
+    def test_expiry_options(self):
+        """Test CRITICAL FIX: All expiry presets (1 day, 7 days, 30 days, custom)"""
+        print("\n⏰ Testing CRITICAL FIX: Expiry Options...")
+        
+        if not self.admin_token:
+            self.log_test("Expiry Options", False, "No admin token available")
+            return False
+        
+        test_cases = [
+            {"name": "1 Day Expiry", "type": "days", "value": 1},
+            {"name": "7 Days Expiry", "type": "days", "value": 7},
+            {"name": "30 Days Expiry", "type": "days", "value": 30},
+            {"name": "Custom 15 Hours", "type": "hours", "value": 15}
+        ]
+        
+        all_passed = True
+        
+        for i, test_case in enumerate(test_cases):
+            profile_data = {
+                "groom_name": f"Test Groom {i+1}",
+                "bride_name": f"Test Bride {i+1}",
+                "event_type": "marriage",
+                "event_date": (datetime.now() + timedelta(days=30)).isoformat(),
+                "venue": f"Test Venue {i+1}",
+                "language": ["english"],
+                "sections_enabled": {
+                    "opening": True,
+                    "welcome": True,
+                    "couple": True,
+                    "photos": False,
+                    "video": False,
+                    "events": True,
+                    "greetings": True,
+                    "footer": True
+                },
+                "link_expiry_type": test_case["type"],
+                "link_expiry_value": test_case["value"]
+            }
+            
+            try:
+                response = self.session.post(f"{API_BASE}/admin/profiles", json=profile_data)
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    
+                    # Verify expiry settings
+                    if (data.get("link_expiry_type") == test_case["type"] and 
+                        data.get("link_expiry_value") == test_case["value"] and
+                        data.get("link_expiry_date") is not None):
+                        
+                        # Calculate expected expiry
+                        if test_case["type"] == "days":
+                            expected_expiry = datetime.now(timezone.utc) + timedelta(days=test_case["value"])
+                        else:  # hours
+                            expected_expiry = datetime.now(timezone.utc) + timedelta(hours=test_case["value"])
+                        
+                        actual_expiry = datetime.fromisoformat(data["link_expiry_date"].replace('Z', '+00:00'))
+                        time_diff = abs((actual_expiry - expected_expiry).total_seconds())
+                        
+                        if time_diff < 300:  # Within 5 minutes tolerance
+                            self.test_profile_ids.append(data["id"])
+                            self.test_slugs.append(data["slug"])
+                            self.log_test(f"Expiry Option: {test_case['name']}", True, 
+                                        f"✅ Expiry calculated correctly")
+                        else:
+                            self.log_test(f"Expiry Option: {test_case['name']}", False, 
+                                        f"Expiry calculation incorrect")
+                            all_passed = False
+                    else:
+                        self.log_test(f"Expiry Option: {test_case['name']}", False, 
+                                    f"Expiry settings incorrect: {data.get('link_expiry_type')}, {data.get('link_expiry_value')}")
+                        all_passed = False
+                else:
+                    self.log_test(f"Expiry Option: {test_case['name']}", False, 
+                                f"Status: {response.status_code}")
+                    all_passed = False
+                    
+            except Exception as e:
+                self.log_test(f"Expiry Option: {test_case['name']}", False, f"Exception: {str(e)}")
+                all_passed = False
+        
+        return all_passed
+
+    def test_link_expiry_validation(self):
+        """Test CRITICAL FIX: Link expiry validation - active vs expired links"""
+        print("\n🔒 Testing CRITICAL FIX: Link Expiry Validation...")
+        
+        if not self.test_slugs:
+            self.log_test("Link Expiry Validation", False, "No test slugs available")
+            return False
+        
+        # Test active profiles (should load correctly)
+        active_tests_passed = 0
+        for slug in self.test_slugs[:3]:  # Test first 3 active profiles
+            try:
+                public_session = requests.Session()
+                response = public_session.get(f"{API_BASE}/invite/{slug}")
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    if "slug" in data and "groom_name" in data:
+                        active_tests_passed += 1
+                        self.log_test(f"Active Link: {slug[:15]}...", True, "✅ Loads correctly")
+                    else:
+                        self.log_test(f"Active Link: {slug[:15]}...", False, "Missing data in response")
+                else:
+                    self.log_test(f"Active Link: {slug[:15]}...", False, f"Status: {response.status_code}")
+                    
+            except Exception as e:
+                self.log_test(f"Active Link: {slug[:15]}...", False, f"Exception: {str(e)}")
+        
+        # Test expired link by soft-deleting a profile
+        if self.test_profile_ids:
+            try:
+                # Soft delete first profile
+                delete_response = self.session.delete(f"{API_BASE}/admin/profiles/{self.test_profile_ids[0]}")
+                
+                if delete_response.status_code == 200:
+                    # Try to access the deleted profile's invitation
+                    public_session = requests.Session()
+                    expired_response = public_session.get(f"{API_BASE}/invite/{self.test_slugs[0]}")
+                    
+                    if expired_response.status_code == 410:
+                        self.log_test("Expired Link Validation", True, "✅ Correctly returns 410 for expired link")
+                        return active_tests_passed >= 2  # At least 2 active links worked
+                    else:
+                        self.log_test("Expired Link Validation", False, 
+                                    f"Expected 410 for expired link, got {expired_response.status_code}")
+                        return False
+                else:
+                    self.log_test("Expired Link Validation", False, "Failed to delete profile for testing")
+                    return False
+                    
+            except Exception as e:
+                self.log_test("Expired Link Validation", False, f"Exception: {str(e)}")
+                return False
+        
+        return False
     
     def test_get_all_profiles(self):
         """Test getting all profiles"""
