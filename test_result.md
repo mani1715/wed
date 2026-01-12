@@ -188,6 +188,9 @@ backend:
         - working: true
         - agent: "testing"
         - comment: "✅ TESTED: Public invitation APIs working perfectly. GET /api/invite/:slug returns complete invitation data including profile, media, and greetings. Guest greeting submission working (submitted by Amit Patel). Link expiry validation working - deleted profiles correctly return 410 status."
+        - working: true
+        - agent: "testing"
+        - comment: "✅ CRITICAL FIXES VERIFIED: Link expiry validation working correctly - active profiles load immediately after creation, expired/deleted profiles return 410 status. Multi-language arrays returned correctly in public API. No 'Link Expired' errors for newly created profiles."
 
   - task: "Admin Initialization"
     implemented: true
