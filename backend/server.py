@@ -54,15 +54,14 @@ def generate_slug(groom_name: str, bride_name: str) -> str:
 
 def calculate_expiry_date(expiry_type: str, expiry_value: Optional[int]) -> Optional[datetime]:
     """Calculate link expiry date"""
-    if expiry_type == "permanent":
-        return None
-    
     now = datetime.now(timezone.utc)
     
-    if expiry_type == "hours" and expiry_value:
+    # Default to 30 days if not specified
+    if not expiry_type or expiry_type == "days":
+        days = expiry_value if expiry_value else 30
+        return now + timedelta(days=days)
+    elif expiry_type == "hours" and expiry_value:
         return now + timedelta(hours=expiry_value)
-    elif expiry_type == "days" and expiry_value:
-        return now + timedelta(days=expiry_value)
     
     return None
 
