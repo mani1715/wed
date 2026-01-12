@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
 Comprehensive Backend API Testing for Wedding Invitation Platform
-Tests all authentication, profile management, media, and public invitation APIs
+FOCUS: Testing CRITICAL FIXES for Default Expiry Logic, Multi-Language Support, and Expiry Options
 """
 
 import requests
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import time
 import os
 from dotenv import load_dotenv
@@ -24,8 +24,8 @@ class WeddingAPITester:
     def __init__(self):
         self.session = requests.Session()
         self.admin_token = None
-        self.test_profile_id = None
-        self.test_slug = None
+        self.test_profile_ids = []  # Store multiple test profiles
+        self.test_slugs = []  # Store multiple test slugs
         self.test_media_id = None
         self.test_greeting_id = None
         
