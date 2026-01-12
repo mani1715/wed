@@ -226,7 +226,7 @@ export const InvitationContent = ({ design, deity }) => {
         {/* Closing Message */}
         <section
           ref={(el) => (sectionsRef.current[5] = el)}
-          className="opacity-0 transition-all duration-700 text-center py-8"
+          className="transition-all duration-700 text-center py-8"
         >
           <div className={`${config.font} ${config.text} space-y-4`}>
             <p className="text-2xl md:text-3xl font-semibold">
