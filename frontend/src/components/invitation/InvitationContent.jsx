@@ -181,7 +181,7 @@ export const InvitationContent = ({ design, deity }) => {
         {/* Family Blessings */}
         <section
           ref={(el) => (sectionsRef.current[3] = el)}
-          className="opacity-0 transition-all duration-700"
+          className="transition-all duration-700"
         >
           <div className="grid md:grid-cols-2 gap-6">
             <Card className={`${config.cardBg} backdrop-blur-sm border-none shadow-xl p-8`}>
