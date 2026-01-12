@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Production-ready wedding & event invitation web platform with admin panel to create invitation profiles, generate unique shareable links, and allow guests to view invitations and submit greetings."
+user_problem_statement: "Production-ready wedding & event invitation web platform with admin panel to create invitation profiles, generate unique shareable links, and allow guests to view invitations and submit greetings. UPDATED: Add design system with 8 selectable themes that control layout, colors, typography, and styling of invitation pages."
 
 backend:
   - task: "Authentication System"
@@ -126,7 +126,7 @@ backend:
     file: "/app/backend/models.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
         - working: "NA"
         - agent: "main"
@@ -137,6 +137,9 @@ backend:
         - working: true
         - agent: "main"
         - comment: "✅ UPDATED: Changed language field from string to List[str] for multi-language support. Default expiry changed to 30 days. ProfileCreate now defaults to link_expiry_type='days' with link_expiry_value=30."
+        - working: "NA"
+        - agent: "main"
+        - comment: "✅ DESIGN SYSTEM ADDED: Added design_id field (default: temple_divine) to Profile, ProfileCreate, ProfileUpdate, ProfileResponse, and InvitationPublicView models. Supports 8 design themes: temple_divine, royal_classic, floral_soft, cinematic_luxury, heritage_scroll, minimal_elegant, modern_premium, artistic_handcrafted."
 
   - task: "Admin CRUD APIs"
     implemented: true
