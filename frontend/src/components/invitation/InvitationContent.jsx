@@ -216,10 +216,10 @@ export const InvitationContent = ({ design, deity }) => {
           className="transition-all duration-700"
         >
           <Card className={`${config.cardBg} backdrop-blur-sm border-none shadow-xl p-8 md:p-12`}>
-            <h2 className={`${config.font} text-3xl md:text-4xl font-semibold ${config.accent} text-center mb-6`}>
+            <h2 className={`${config.font} text-3xl md:text-4xl font-semibold ${cardAccentColor} text-center mb-6`}>
               Reception
             </h2>
-            <div className={`${config.text} text-center space-y-4`}>
+            <div className={`${cardTextColor} text-center space-y-4`}>
               <p className="text-lg">Join us for dinner and celebrations</p>
               <p className="font-semibold text-xl">Same Day - 7:00 PM Onwards</p>
               <p className="opacity-80">Grand Heritage Hall, Bangalore</p>
