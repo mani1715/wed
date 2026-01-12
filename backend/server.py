@@ -68,13 +68,18 @@ def calculate_expiry_date(expiry_type: str, expiry_value: Optional[int]) -> Opti
 
 async def check_profile_active(profile: dict) -> bool:
     """Check if profile is active and not expired"""
-    if not profile.get('is_active', False):
+    if not profile.get('is_active', True):
         return False
     
     expiry_date = profile.get('link_expiry_date')
     if expiry_date:
         if isinstance(expiry_date, str):
             expiry_date = datetime.fromisoformat(expiry_date)
+        
+        # Ensure expiry_date is timezone-aware
+        if expiry_date.tzinfo is None:
+            expiry_date = expiry_date.replace(tzinfo=timezone.utc)
+        
         if datetime.now(timezone.utc) > expiry_date:
             return False
     
