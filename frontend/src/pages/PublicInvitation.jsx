@@ -540,7 +540,7 @@ const PublicInvitation = () => {
               className="text-lg"
               style={{ color: 'var(--color-text, #4A3728)' }}
             >
-              Your presence will make our day even more special
+              {getT('footer', 'thankyou')}
             </p>
           </div>
         )}
