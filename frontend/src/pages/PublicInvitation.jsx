@@ -24,7 +24,7 @@ const PublicInvitation = () => {
     fetchInvitation();
   }, [slug]);
 
-  // Apply theme when invitation loads
+  // Apply theme and set default language when invitation loads
   useEffect(() => {
     if (invitation && invitation.design_id) {
       const theme = getTheme(invitation.design_id);
@@ -35,6 +35,11 @@ const PublicInvitation = () => {
       link.href = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:wght@400;600;700&family=Playfair+Display:wght@400;600;700&family=Libre+Baskerville:wght@400;700&family=Quicksand:wght@400;600;700&family=Nunito:wght@400;600;700&family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;600;700&family=UnifrakturMaguntia&family=Merriweather:wght@400;700&family=Raleway:wght@400;600;700&family=Inter:wght@400;600;700&family=Poppins:wght@400;600;700&family=Open+Sans:wght@400;600;700&family=Indie+Flower&family=Architects+Daughter&display=swap';
       link.rel = 'stylesheet';
       document.head.appendChild(link);
+      
+      // Set default language (first enabled language)
+      if (invitation.enabled_languages && invitation.enabled_languages.length > 0) {
+        setSelectedLanguage(invitation.enabled_languages[0]);
+      }
     }
   }, [invitation]);
 
