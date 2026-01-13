@@ -450,6 +450,119 @@ async def get_profile_greetings(profile_id: str, admin_id: str = Depends(get_cur
     return [GreetingResponse(**g) for g in greetings]
 
 
+# ==================== CONFIGURATION ROUTES ====================
+
+@api_router.get("/config/designs")
+async def get_designs():
+    """Get all available design themes"""
+    designs = [
+        {
+            "id": "royal_classic",
+            "name": "Royal Classic",
+            "description": "Elegant maroon and gold with traditional motifs",
+            "thumbnail": "/assets/designs/royal_classic_thumb.webp",
+            "preview": "/assets/designs/royal_classic_preview.webp"
+        },
+        {
+            "id": "floral_soft",
+            "name": "Floral Soft",
+            "description": "Pastel pink with delicate floral patterns",
+            "thumbnail": "/assets/designs/floral_soft_thumb.webp",
+            "preview": "/assets/designs/floral_soft_preview.webp"
+        },
+        {
+            "id": "divine_temple",
+            "name": "Divine Temple",
+            "description": "Warm ivory and gold with sacred temple aesthetics",
+            "thumbnail": "/assets/designs/divine_temple_thumb.webp",
+            "preview": "/assets/designs/divine_temple_preview.webp"
+        },
+        {
+            "id": "modern_minimal",
+            "name": "Modern Minimal",
+            "description": "Clean white and gray with contemporary design",
+            "thumbnail": "/assets/designs/modern_minimal_thumb.webp",
+            "preview": "/assets/designs/modern_minimal_preview.webp"
+        },
+        {
+            "id": "cinematic_luxury",
+            "name": "Cinematic Luxury",
+            "description": "Dark gradient with gold accents and premium feel",
+            "thumbnail": "/assets/designs/cinematic_luxury_thumb.webp",
+            "preview": "/assets/designs/cinematic_luxury_preview.webp"
+        }
+    ]
+    return designs
+
+
+@api_router.get("/config/deities")
+async def get_deities():
+    """Get all available deity options"""
+    deities = [
+        {
+            "id": "none",
+            "name": "No Religious Theme",
+            "description": "Secular invitation without deity imagery",
+            "thumbnail": "/assets/deities/none.svg"
+        },
+        {
+            "id": "ganesha",
+            "name": "Lord Ganesha",
+            "description": "Remover of obstacles, auspicious beginning",
+            "thumbnail": "/assets/deities/ganesha_thumb.webp",
+            "languages": ["english", "telugu", "hindi"]
+        },
+        {
+            "id": "venkateswara_padmavati",
+            "name": "Lord Venkateswara & Padmavati",
+            "description": "Divine couple symbolizing eternal love",
+            "thumbnail": "/assets/deities/venkateswara_padmavati_thumb.webp",
+            "languages": ["english", "telugu", "hindi"]
+        },
+        {
+            "id": "shiva_parvati",
+            "name": "Lord Shiva & Parvati",
+            "description": "Perfect union of masculine and feminine energy",
+            "thumbnail": "/assets/deities/shiva_parvati_thumb.webp",
+            "languages": ["english", "telugu", "hindi"]
+        },
+        {
+            "id": "lakshmi_vishnu",
+            "name": "Lakshmi & Vishnu",
+            "description": "Wealth, prosperity, and harmony",
+            "thumbnail": "/assets/deities/lakshmi_vishnu_thumb.webp",
+            "languages": ["english", "telugu", "hindi"]
+        }
+    ]
+    return deities
+
+
+@api_router.get("/config/languages")
+async def get_languages():
+    """Get available language configuration"""
+    languages = [
+        {
+            "code": "english",
+            "name": "English",
+            "nativeName": "English",
+            "rtl": False
+        },
+        {
+            "code": "telugu",
+            "name": "Telugu",
+            "nativeName": "తెలుగు",
+            "rtl": False
+        },
+        {
+            "code": "hindi",
+            "name": "Hindi",
+            "nativeName": "हिन्दी",
+            "rtl": False
+        }
+    ]
+    return languages
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
