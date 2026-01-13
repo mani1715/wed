@@ -315,6 +315,9 @@ frontend:
         - working: "NA"
         - agent: "main"
         - comment: "✅ VERIFIED COMPLETE: Theme application fully implemented with CSS variables. All sections styled with theme variables. Google Fonts loaded dynamically. No animations or particles. Mobile-first responsive. Ready for frontend testing to verify theme switching works correctly."
+        - working: "NA"
+        - agent: "main"
+        - comment: "✅ LANGUAGE SWITCHING IMPLEMENTED: Added multi-language support with runtime language switching. Language switcher UI shows enabled languages from profile (only visible when 2+ languages enabled). Default language set from first enabled language. All text sections (opening, welcome, events, photos, video, greetings, footer) now use getText/getSectionText with proper fallback (custom_text → languageTemplates → english). No page reload required. Supports English, Telugu, Hindi. Clean button-based toggle UI. Ready for testing."
 
   - task: "Theme Configuration System"
     implemented: true
