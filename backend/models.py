@@ -47,7 +47,12 @@ class Profile(BaseModel):
     event_date: datetime
     venue: str
     language: List[str]  # telugu, hindi, tamil, english - multiple languages supported
-    design_id: str = "temple_divine"  # Selected design theme
+    design_id: str = "royal_classic"  # Selected design theme
+    deity_id: Optional[str] = None  # Selected deity: ganesha, venkateswara_padmavati, shiva_parvati, lakshmi_vishnu, none
+    whatsapp_groom: Optional[str] = None  # Groom WhatsApp number in E.164 format
+    whatsapp_bride: Optional[str] = None  # Bride WhatsApp number in E.164 format
+    enabled_languages: List[str] = Field(default=["english"])  # Languages enabled for this invitation
+    custom_text: Dict[str, Dict[str, str]] = Field(default_factory=dict)  # Custom text overrides {language: {section: text}}
     sections_enabled: SectionsEnabled = Field(default_factory=SectionsEnabled)
     link_expiry_type: str  # hours, days, permanent
     link_expiry_value: Optional[int] = None  # number of hours/days
@@ -55,6 +60,43 @@ class Profile(BaseModel):
     is_active: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    
+    @field_validator('whatsapp_groom', 'whatsapp_bride')
+    def validate_whatsapp_number(cls, v):
+        """Validate WhatsApp number is in E.164 format"""
+        if v is not None and v.strip():
+            pattern = r'^\+[1-9]\d{1,14}$'
+            if not re.match(pattern, v):
+                raise ValueError('WhatsApp number must be in E.164 format (e.g., +919876543210)')
+        return v
+    
+    @field_validator('design_id')
+    def validate_design_id(cls, v):
+        """Validate design_id is one of the allowed values"""
+        allowed_designs = ['royal_classic', 'floral_soft', 'divine_temple', 'modern_minimal', 'cinematic_luxury']
+        if v not in allowed_designs:
+            raise ValueError(f'design_id must be one of: {", ".join(allowed_designs)}')
+        return v
+    
+    @field_validator('deity_id')
+    def validate_deity_id(cls, v):
+        """Validate deity_id is one of the allowed values"""
+        if v is not None:
+            allowed_deities = ['ganesha', 'venkateswara_padmavati', 'shiva_parvati', 'lakshmi_vishnu', 'none']
+            if v not in allowed_deities:
+                raise ValueError(f'deity_id must be one of: {", ".join(allowed_deities)} or null')
+        return v
+    
+    @field_validator('enabled_languages')
+    def validate_enabled_languages(cls, v):
+        """Validate at least one language is enabled"""
+        if not v or len(v) == 0:
+            raise ValueError('At least one language must be enabled')
+        allowed_languages = ['english', 'telugu', 'hindi']
+        for lang in v:
+            if lang not in allowed_languages:
+                raise ValueError(f'Language must be one of: {", ".join(allowed_languages)}')
+        return v
 
 
 class ProfileCreate(BaseModel):
