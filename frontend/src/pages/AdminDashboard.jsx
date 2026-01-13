@@ -69,6 +69,17 @@ const AdminDashboard = () => {
     return labels[type] || type;
   };
 
+  const getDesignName = (designId) => {
+    const design = DESIGN_THEMES.find(d => d.id === designId);
+    return design ? design.name : designId;
+  };
+
+  const getDeityName = (deityId) => {
+    if (!deityId) return 'No Religious Theme';
+    const deity = DEITY_OPTIONS.find(d => d.id === deityId);
+    return deity ? deity.name : 'Unknown';
+  };
+
   const getExpiryInfo = (profile) => {
     if (profile.link_expiry_type === 'permanent') {
       return 'Permanent';
