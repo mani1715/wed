@@ -222,6 +222,11 @@ class ProfileResponse(BaseModel):
     venue: str
     language: List[str]
     design_id: str
+    deity_id: Optional[str]
+    whatsapp_groom: Optional[str]
+    whatsapp_bride: Optional[str]
+    enabled_languages: List[str]
+    custom_text: Dict[str, Dict[str, str]]
     sections_enabled: SectionsEnabled
     link_expiry_type: str
     link_expiry_value: Optional[int]
