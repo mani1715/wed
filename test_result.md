@@ -209,6 +209,9 @@ backend:
         - working: true
         - agent: "testing"
         - comment: "✅ TIMEZONE FIX VERIFIED: Comprehensive testing confirms timezone-aware datetime comparisons working perfectly. All newly created profiles have is_active=True by default and are immediately accessible. No 'Link Expired' errors for fresh profiles. All expiry options (1 day, 7 days, 30 days) work correctly. Guest greeting submission working without timezone issues. Critical timezone fix successfully implemented and tested."
+        - working: true
+        - agent: "testing"
+        - comment: "✅ COMPREHENSIVE REVIEW REQUEST TESTING COMPLETE: All public invitation API requirements verified (39/39 tests passed). Public API accessible without authentication ✅. Returns complete profile data including slug, names, event details, design_id, deity_id, whatsapp numbers, enabled_languages, media, greetings ✅. Invalid slug returns 404 ✅. Guest greeting submission working without auth ✅. Greetings appear in public invitation response ✅. All expiry logic working correctly (default 30 days, custom expiry, immediate access) ✅. Public invitation APIs are production-ready and meet all review requirements."
 
   - task: "Admin Initialization"
     implemented: true
