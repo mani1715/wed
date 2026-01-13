@@ -262,7 +262,7 @@ const PublicInvitation = () => {
                 color: 'var(--color-primary, #8B7355)'
               }}
             >
-              Event Details
+              {getT('events', 'title')}
             </h3>
             <div className="space-y-4">
               <div className="flex items-start">
@@ -275,7 +275,7 @@ const PublicInvitation = () => {
                     className="font-semibold"
                     style={{ color: 'var(--color-primary, #8B7355)' }}
                   >
-                    Date & Time
+                    {getT('events', 'dateLabel')}
                   </p>
                   <p style={{ color: 'var(--color-text, #4A3728)' }}>
                     {eventDate.toLocaleDateString('en-US', {
@@ -297,7 +297,7 @@ const PublicInvitation = () => {
                     className="font-semibold"
                     style={{ color: 'var(--color-primary, #8B7355)' }}
                   >
-                    Venue
+                    {getT('events', 'venueLabel')}
                   </p>
                   <p 
                     className="whitespace-pre-line"
