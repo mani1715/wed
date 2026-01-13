@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field, ConfigDict, field_validator
 from typing import Optional, List, Dict
 from datetime import datetime, timezone
 import uuid
+import re
 
 
 class Admin(BaseModel):
