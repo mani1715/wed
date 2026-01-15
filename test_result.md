@@ -306,6 +306,9 @@ frontend:
         - working: "NA"
         - agent: "main"
         - comment: "✅ VERIFIED COMPLETE: Design selection UI fully implemented with 8 clickable cards. Each shows name and description. Single selection with visual feedback (border highlight and checkmark). Default design: temple_divine. Ready for frontend testing."
+        - working: "NA"
+        - agent: "main"
+        - comment: "✅ PHASE 3 - DEITY SELECTION VERIFIED: ProfileForm already includes deity selection UI (lines 425-467). Section titled 'Religious Background (Optional)' with descriptive text. Displays all DEITY_OPTIONS in grid (2-5 columns responsive). Each deity card shows thumbnail image, name, and description. Single selection with visual feedback. Clicking 'none' sets deity_id to null. Default state: no deity selected (null). Ready for frontend testing."
 
   - task: "Public Invitation Viewer"
     implemented: true
