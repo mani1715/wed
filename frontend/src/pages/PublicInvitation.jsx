@@ -6,8 +6,72 @@ import { Button } from '@/components/ui/button';
 import { Heart, Calendar, MapPin, Send, Languages, MessageCircle } from 'lucide-react';
 import { getTheme, applyThemeVariables } from '@/config/themes';
 import { getText, getSectionText, getLanguage } from '@/config/languageTemplates';
+import { getDeity, getDeityImage } from '@/config/religiousAssets';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+
+// Deity Background Component - Progressive Loading Layer
+const DeityBackground = ({ deityId }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [currentImage, setCurrentImage] = useState(null);
+  
+  useEffect(() => {
+    if (!deityId) return;
+    
+    const deity = getDeity(deityId);
+    if (!deity || !deity.images) return;
+    
+    // Start with thumbnail
+    const thumbnail = new Image();
+    thumbnail.src = deity.images.thumbnail;
+    thumbnail.onload = () => {
+      setCurrentImage(deity.images.thumbnail);
+      
+      // Load mobile or desktop based on screen size
+      const isMobile = window.innerWidth < 768;
+      const nextImage = new Image();
+      nextImage.src = isMobile ? deity.images.mobile : deity.images.desktop;
+      nextImage.onload = () => {
+        setCurrentImage(isMobile ? deity.images.mobile : deity.images.desktop);
+        setImageLoaded(true);
+      };
+    };
+  }, [deityId]);
+  
+  if (!deityId || !currentImage) {
+    return null;
+  }
+  
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 0,
+        pointerEvents: 'none',
+        opacity: 0.2,
+        overflow: 'hidden'
+      }}
+    >
+      <img
+        src={currentImage}
+        alt="Religious background"
+        loading="lazy"
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center',
+          filter: imageLoaded ? 'none' : 'blur(10px)',
+          transition: 'filter 0.3s ease-in-out'
+        }}
+      />
+    </div>
+  );
+};
 
 const PublicInvitation = () => {
   const { slug } = useParams();
