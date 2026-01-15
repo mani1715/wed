@@ -11,7 +11,7 @@ import sys
 import os
 
 # Configuration
-BACKEND_URL = "https://nuptial-space-1.preview.emergentagent.com/api"
+BACKEND_URL = "https://dream-wedding-13.preview.emergentagent.com/api"
 ADMIN_EMAIL = "admin@wedding.com"
 ADMIN_PASSWORD = "admin123"
 
